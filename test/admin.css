@@ -1,0 +1,34 @@
+body {
+    font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+    padding: 30px;
+    background: #f6f8fc;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  th, td {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    text-align: center;
+  }
+  input {
+    padding: 6px;
+    margin: 4px;
+    width: 100px;
+  }
+  .btn {
+    padding: 8px 16px;
+    background: #5c6bc0;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  .btn:hover {
+    background: #3949ab;
+  }
+  .actions button {
+    margin: 0 5px;
+  }
