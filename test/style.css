@@ -32,6 +32,26 @@ body {
     box-shadow: 0 12px 24px rgba(0,0,0,0.3);
   }
   
+  #topImage {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 100px;
+    height: 100px;
+    object-fit: cover; /* 사진 비율 잘 유지하면서 채워줌 */
+    border-radius: 10px; /* 모서리 둥글게 (선택) */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 부드러운 그림자 (선택) */
+    z-index: 1000; /* 슬롯머신보다 위에 뜨게 */
+  }
+  
+  #Title {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+
   .btn {
     margin-top: 30px;
     padding: 12px 30px;
@@ -87,10 +107,6 @@ body {
     z-index: 999;
   }
   
-  .hidden {
-    display: none;
-  }
-  
   #loginMenu input {
     padding: 10px;
     font-size: 16px;
@@ -110,4 +126,79 @@ body {
   
   #loginMenu .btn:hover {
     background: #3949ab;
+  }
+
+  #historyWrapper {
+    width: 300px;
+    height: 150px; /* 원하는 고정 높이 설정 */
+    margin: 0 auto;
+    border: 2px solid #ccc;
+    border-radius: 12px;
+    overflow-y: auto; /* 세로 방향 스크롤 */
+    padding: 10px;
+    background: white;
+  }
+  
+  .history-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .history-list li {
+    margin: 8px 0;
+    font-size: 18px;
+    color: #555;
+  }
+  
+
+
+  .bottom-left-btn {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    background: #5c6bc0;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: background 0.3s ease;
+    z-index: 1000; /* 항상 위로 */
+  }
+  
+  .bottom-left-btn:hover {
+    background: #3949ab;
+  }
+  
+
+
+  #slotWrapper {
+    width: 500px;
+    height: 100px;
+    margin: 20px auto;
+    border: 3px solid #000;
+    overflow: hidden;
+    position: relative;
+    background: white;
+  }
+  
+  #slot {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+  
+  #slot div {
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    font-weight: bold;
+    /* border-bottom: 1px solid #ccc; */
   }

@@ -1,4 +1,4 @@
-const items = JSON.parse(localStorage.getItem('items')) || []; 
+const items = JSON.parse(localStorage.getItem('items2')) || []; 
 
 // const picker = document.getElementById('picker');
 // const startBtn = document.getElementById('startBtn');
@@ -56,7 +56,7 @@ const items = JSON.parse(localStorage.getItem('items')) || [];
 
 const slot = document.getElementById('slot');
 const startBtn = document.getElementById('startBtn');
-const historyList = document.getElementById('history');
+const historyList = document.getElementById('history2');
 
 let history = [];
 let animationFrame;
