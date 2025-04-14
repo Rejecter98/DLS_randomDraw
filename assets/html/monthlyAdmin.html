@@ -4,22 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DLS 실력의힘 간식뽑기 프로그램</title>
-    <link rel="stylesheet" href="./admin.css" />
+    <link rel="stylesheet" href="../css/admin.css" />
 </head>
 <body>
-    <button id="loginBtn" class="btn" onclick="location.href='./index.html'">돌아가기</button>
+    <button id="loginBtn" class="btn" onclick="location.href='./monthly.html'">돌아가기</button>
     
 
-    <h1>🎯 Daily 품목 및 가중치 관리</h1>
+    <h1>🎯 Monthly 품목 및 가중치 관리</h1>
 
   <div>
-    <input type="text" id="newName" placeholder="항목 (예: 마이쮸)">
-    <input type="number" id="newWeight" placeholder="가중치 (예: 50)">
+    <input type="text" id="newName2" placeholder="항목 (예: 마이쮸)">
+    <input type="number" id="newWeight2" placeholder="가중치 (예: 50)">
     <button class="btn" onclick="addItem()">항목 추가</button>
     <button class="btn" onclick="saveItems()">저장</button>
   </div>
 
-  <table id="itemsTable">
+  <table id="itemsTable2">
     <thead>
       <tr>
         <th>항목</th>
@@ -34,14 +34,14 @@
 
   <script>
     // 기본 아이템 리스트 (처음 로드용)
-    let items = JSON.parse(localStorage.getItem('items')) || [
+    let items = JSON.parse(localStorage.getItem('items2')) || [
       { name: '🍎', weight: 50 },
       { name: '🍒', weight: 30 },
       { name: '🥥', weight: 20 }
     ];
 
     function renderItems() {
-      const tbody = document.getElementById('itemsTable').querySelector('tbody');
+      const tbody = document.getElementById('itemsTable2').querySelector('tbody');
       tbody.innerHTML = '';
       items.forEach((item, idx) => {
         const tr = document.createElement('tr');
@@ -57,8 +57,8 @@
     }
 
     function addItem() {
-      const name = document.getElementById('newName').value.trim();
-      const weight = parseInt(document.getElementById('newWeight').value);
+      const name = document.getElementById('newName2').value.trim();
+      const weight = parseInt(document.getElementById('newWeight2').value);
 
       if (!name || isNaN(weight)) {
         alert('항목과 가중치를 모두 입력하세요.');
@@ -66,8 +66,8 @@
       }
 
       items.push({ name, weight });
-      document.getElementById('newName').value = '';
-      document.getElementById('newWeight').value = '';
+      document.getElementById('newName2').value = '';
+      document.getElementById('newWeight2').value = '';
       renderItems();
     }
 
@@ -85,7 +85,7 @@
     }
 
     function saveItems() {
-      localStorage.setItem('items', JSON.stringify(items));
+      localStorage.setItem('items2', JSON.stringify(items));
       alert('항목과 가중치가 저장되었습니다.');
     }
 
