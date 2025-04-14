@@ -4,13 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DLS 실력의힘 간식뽑기 프로그램</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
-    <img id="topImage" src="logo.png" alt="Top Image">
+    <img id="topImage" src="./logo.png" alt="Top Image">
 
-    <button id="loginBtn" class="login-btn">관리자</button>
-    <a href="index.html" class="bottom-left-btn" id="bottomLeftBtn">Daily</a>
+    <button id="loginBtn" class="btn admin">관리자</button>
+    <a href="./index.html" id="bottomLeftBtn" class="btn change">Monthly</a>
+    <button id="fullscreenBtn" class="btn full">전체화면</button>
+
 
     
     <div class="container">
@@ -22,15 +24,15 @@
           </div>
 
 
-        <button id="startBtn" class="btn">뽑기 시작!</button>
+        <button id="startBtn" class="start-btn">뽑기 시작!</button>
         
         <h2>최근 뽑기 기록</h2>
         <div id="historyWrapper">
-            <ul id="history" class="history-list"></ul>
+            <ul id="history2" class="history-list"></ul>
         </div>
 
 
-      <script src="monthly.js"></script>
-      <script src="monthlyLogin.js"></script>
+      <script src="./monthly.js"></script>
+      <script src="./monthlyLogin.js"></script>
 </body>
 </html>

@@ -8,7 +8,7 @@ loginBtn.addEventListener('click', () => {
 
   if (password === '7905') {
     // 성공: 다음 페이지로 이동
-    window.location.href = 'admin.html'; // 👉 여기에 이동할 페이지 경로 입력!
+    window.location.href = './admin.html'; // 👉 여기에 이동할 페이지 경로 입력!
   } else {
     // 실패: 알림창 띄우기
     alert('비밀번호가 틀렸습니다.');

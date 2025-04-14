@@ -52,7 +52,7 @@ body {
   }
   
 
-  .start-btn {
+  .btn {
     margin-top: 30px;
     padding: 12px 30px;
     font-size: 20px;
@@ -65,42 +65,67 @@ body {
     transition: background 0.3s ease;
   }
   
-  .start-btn:hover {
+  .btn:hover {
     background: #3949ab;
   }
 
-  .btn {
+.login-btn {
     position: fixed;
-    padding: 12px 24px;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: #5c6bc0;
+    color: white;
     font-size: 16px;
     font-weight: bold;
-    background: #5c6bc0;
-    color: white;
     border: none;
     border-radius: 30px;
     cursor: pointer;
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
     transition: background 0.3s ease;
-    z-index: 1000;
   }
-
-  .btn:hover {
+  
+  .login-btn:hover {
+    background-color: #3949ab;
+  }
+  
+  /* 로그인 메뉴 */
+#loginMenu {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    text-align: center;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 220px;
+    z-index: 999;
+  }
+  
+  #loginMenu input {
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+  }
+  
+  #loginMenu .btn {
+    padding: 8px;
+    background: #5c6bc0;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  #loginMenu .btn:hover {
     background: #3949ab;
-  }
-  
-  .admin {
-    top: 20px;
-    right: 20px;
-  }
-  
-  .change {
-    bottom: 20px;
-    left: 20px;
-  }
-  
-  .full {
-    bottom: 20px;
-    right: 20px;
   }
 
   #historyWrapper {
@@ -126,6 +151,30 @@ body {
     color: #555;
   }
   
+
+
+  .bottom-left-btn {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    background: #5c6bc0;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: background 0.3s ease;
+    z-index: 1000; /* 항상 위로 */
+  }
+  
+  .bottom-left-btn:hover {
+    background: #3949ab;
+  }
+  
+
 
   #slotWrapper {
     width: 500px;
@@ -153,3 +202,25 @@ body {
     font-weight: bold;
     /* border-bottom: 1px solid #ccc; */
   }
+
+  .fullscreen-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: bold;
+    background: #5c6bc0;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    transition: background 0.3s ease;
+    z-index: 1000; /* 항상 최상단 */
+  }
+  
+  .fullscreen-btn:hover {
+    background: #3949ab;
+  }
+  

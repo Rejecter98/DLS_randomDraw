@@ -1,59 +1,5 @@
 const items = JSON.parse(localStorage.getItem('items')) || []; 
 
-// const picker = document.getElementById('picker');
-// const startBtn = document.getElementById('startBtn');
-// const historyList = document.getElementById('history');
-
-
-// let history = [];
-
-// function pickResult() {
-//     picker.classList.add('active');
-  
-//     const selectedItem = weightedRandom(items);
-  
-//     picker.textContent = selectedItem.name;
-  
-//     saveResult(selectedItem.name);
-  
-//     setTimeout(() => {
-//       picker.classList.remove('active');
-//     }, 300);
-//   }
-  
-//   // 가중치 기반 랜덤 함수
-//   function weightedRandom(items) {
-//     const totalWeight = items.reduce((sum, item) => sum + item.weight, 0);
-//     let randomNum = Math.random() * totalWeight;
-    
-//     for (let item of items) {
-//       if (randomNum < item.weight) {
-//         return item;
-//       }
-//       randomNum -= item.weight;
-//     }
-//   }
-  
-
-// function saveResult(item) {
-//   history.unshift(item);
-//   if (history.length > 10) {
-//     history.pop();
-//   }
-//   renderHistory();
-// }
-
-// function renderHistory() {
-//   historyList.innerHTML = '';
-//   history.forEach((item, idx) => {
-//     const li = document.createElement('li');
-//     li.textContent = `${idx + 1}. ${item}`;
-//     historyList.appendChild(li);
-//   });
-// }
-
-// startBtn.addEventListener('click', pickResult);
-
 const slot = document.getElementById('slot');
 const startBtn = document.getElementById('startBtn');
 const historyList = document.getElementById('history');
@@ -62,6 +8,40 @@ let history = [];
 let animationFrame;
 let position = 0;
 let speed = 30;
+
+const fullscreenBtn = document.getElementById('fullscreenBtn');
+
+// 전체화면 진입 버튼 클릭
+fullscreenBtn.addEventListener('click', openFullscreen);
+
+// 전체화면 요청
+function openFullscreen() {
+  const elem = document.documentElement;
+
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  } else if (elem.mozRequestFullScreen) { // Firefox
+    elem.mozRequestFullScreen();
+  } else if (elem.webkitRequestFullscreen) { // Chrome, Safari
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) { // IE/Edge
+    elem.msRequestFullscreen();
+  }
+}
+
+// 전체화면 상태 변화 감지
+document.addEventListener('fullscreenchange', () => {
+  if (document.fullscreenElement) {
+    // 전체화면 모드 진입했으면 버튼 숨기기
+    fullscreenBtn.style.display = 'none';
+  } else {
+    // 전체화면 종료했으면 버튼 다시 보이기
+    fullscreenBtn.style.display = 'block';
+  }
+});
+
+
+
 
 // 초기 슬롯 셋업
 function initSlot() {
