@@ -3,6 +3,9 @@ const items = JSON.parse(localStorage.getItem('items')) || [];
 const slot = document.getElementById('slot');
 const startBtn = document.getElementById('startBtn');
 const historyList = document.getElementById('history');
+const showHistoryBtn = document.getElementById('showHistoryBtn');
+const closeHistoryBtn = document.getElementById('closeHistoryBtn');
+const historyModal = document.getElementById('historyModal');
 
 let history = [];
 let animationFrame;
@@ -41,7 +44,15 @@ document.addEventListener('fullscreenchange', () => {
 });
 
 
+// 기록 보기 버튼 → 팝업 열기
+showHistoryBtn.addEventListener('click', () => {
+  historyModal.classList.remove('hidden');
+});
 
+// 닫기 버튼 → 팝업 닫기
+closeHistoryBtn.addEventListener('click', () => {
+  historyModal.classList.add('hidden');
+});
 
 // 초기 슬롯 셋업
 function initSlot() {
