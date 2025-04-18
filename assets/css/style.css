@@ -36,8 +36,8 @@ body {
     position: fixed;
     top: 20px;
     left: 20px;
-    width: 100px;
-    height: 100px;
+    width: 200px;
+    height: 200px;
     object-fit: cover; /* 사진 비율 잘 유지하면서 채워줌 */
     border-radius: 10px; /* 모서리 둥글게 (선택) */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 부드러운 그림자 (선택) */
@@ -165,7 +165,7 @@ body {
 
 
   #slotWrapper {
-    width: 500px;
+    width: 700px;
     height: 300px;
     margin: 20px auto;
     border: 3px solid #000;
