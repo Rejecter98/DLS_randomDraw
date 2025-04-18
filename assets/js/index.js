@@ -108,10 +108,11 @@ function rolling() {
 
 // 멈추기
 function stopAtResult() {
-  const finalTop = Math.round(position / 100) * 100;
+  const itemHeight = 200;
+  const finalTop = Math.round(position / itemHeight) * itemHeight;
   slot.style.top = `-${finalTop}px`;
 
-  const index = Math.floor(finalTop / 100) % slot.children.length;
+  const index = Math.floor(finalTop / itemHeight) % slot.children.length;
   const selectedItem = slot.children[index].textContent;
 
   saveResult(selectedItem);
