@@ -1,5 +1,5 @@
 {
-    "name": "DLS_randomDraw",
+    "name": "DLS_roulette",
     "short_name": "실력의힘 간식뽑기",
     "start_url": "/index.html",
     "display": "standalone",
