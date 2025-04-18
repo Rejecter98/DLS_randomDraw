@@ -108,7 +108,7 @@ function rolling() {
 
 // 멈추기
 function stopAtResult() {
-  const itemHeight = 200;
+  const itemHeight = 300;
   const finalTop = Math.round(position / itemHeight) * itemHeight;
   slot.style.top = `-${finalTop}px`;
 
