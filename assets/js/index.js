@@ -1,4 +1,5 @@
-const items = JSON.parse(localStorage.getItem('items')) || []; 
+
+const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSlFBgUtQYZiWvohdZFqPDpRiw0Yd7t-Q4ifrpUkmo_ra6V56KM-h27Ur5HpC_DZ1lcZGsNk87yEaT9/pub?gid=143793284&single=true&output=csv';
 
 const slot = document.getElementById('slot');
 const startBtn = document.getElementById('startBtn');
@@ -6,13 +7,15 @@ const historyList = document.getElementById('history');
 const showHistoryBtn = document.getElementById('showHistoryBtn');
 const closeHistoryBtn = document.getElementById('closeHistoryBtn');
 const historyModal = document.getElementById('historyModal');
+const fullscreenBtn = document.getElementById('fullscreenBtn');
 
+let items = [];
 let history = [];
 let animationFrame;
 let position = 0;
 let speed = 30;
 
-const fullscreenBtn = document.getElementById('fullscreenBtn');
+
 
 // 전체화면 진입 버튼 클릭
 fullscreenBtn.addEventListener('click', openFullscreen);
@@ -53,6 +56,28 @@ showHistoryBtn.addEventListener('click', () => {
 closeHistoryBtn.addEventListener('click', () => {
   historyModal.classList.add('hidden');
 });
+
+//csv파일 로드
+async function loadItemsFromCSV() {
+  const res = await fetch(csvUrl);
+  const csv = await res.text();
+  const lines = csv.trim().split('\n');
+
+  items = lines.slice(1).map(line => {
+    const [name, weight] = line.split(',');
+    return {
+      name: name.trim(),
+      weight: parseInt(weight)
+    };
+  });
+
+  initSlot(); // 슬롯에 반영
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  loadItemsFromCSV();
+});
+
 
 // 초기 슬롯 셋업
 function initSlot() {
