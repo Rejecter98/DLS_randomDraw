@@ -2,7 +2,7 @@ body {
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center center;
-    background-color: #000;
+    background-color: #ffffff;
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -11,11 +11,11 @@ body {
   }
   
   body.index {
-    background: url('../../images/daily_bg.gif');
+    background-image: url('../../images/daily_bg.gif');
   }
   
   body.monthly {
-    background: url('../../images/monthly_bg.gif');
+    background-image: url('../../images/monthly_bg.gif');
   }
 
   .container {
