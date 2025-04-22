@@ -9,16 +9,14 @@
     <meta name="theme-color" content="#4A90E2">
 
 </head>
-<body>
-    <img id="topImage" src="images/logo.png" alt="Top Image">
-
+<body class="index">
     <a href="assets/html/monthly.html" id="bottomLeftBtn" class="btn change">Monthly</a>
     <button id="fullscreenBtn" class="btn full">전체화면</button>
 
 
     
     <div class="container">
-        <h1 id="Title">Daily reward!</h1>
+        <!-- <h1 id="Title">Daily reward!</h1> -->
         <div id="slotWrapper" class="card">
             <div id="slot">
               <!-- 항목들이 자동으로 생성됩니다 -->
@@ -26,10 +24,12 @@
           </div>
 
 
-        <button id="startBtn" class="start-btn">뽑기 시작!</button>
+        <button id="startBtn" class="start-btn">
+          <img src="images/start_btn.png" alt="뽑기 시작" />
+        </button>
         
         <!-- 기록 열기 버튼 -->
-        <button id="showHistoryBtn" class="start-btn">기록 보기</button>
+        <button id="showHistoryBtn" class="btn history">기록 보기</button>
 
         <!-- 뽑기 기록 팝업 -->
         <div id="historyModal" class="modal hidden">

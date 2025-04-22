@@ -1,5 +1,7 @@
 body {
-    background: linear-gradient(135deg, #f6f8fc, #e0e4f1);
+    /* background: linear-gradient(135deg, #f6f8fc, #e0e4f1); */
+    
+    background-size: cover;
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -7,6 +9,14 @@ body {
     font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
   }
   
+  body.index {
+    background: url('../../images/daily_bg.gif') no-repeat center center fixed;
+  }
+  
+  body.monthly {
+    background: url('../../images/monthly_bg.gif') no-repeat center center fixed;
+  }
+
   .container {
     text-align: center;
   }
@@ -58,16 +68,19 @@ body {
     font-size: 20px;
     font-weight: bold;
     color: white;
-    background: #5c6bc0;
+    background: none;
     border: none;
     border-radius: 30px;
     cursor: pointer;
     transition: background 0.3s ease;
   }
-  
-  .start-btn:hover {
-    background: #3949ab;
+
+  .start-btn img {
+    width: 320px;
+    height: auto;
+    display: block;
   }
+  
 
   .btn {
     position: fixed;
@@ -93,9 +106,14 @@ body {
     left: 20px;
   }
   
-  .full {
+  .history {
     bottom: 20px;
     right: 20px;
+  }
+
+  .full {
+    bottom: 20px;
+    right: 150px;
   }
 
   #historyWrapper {
