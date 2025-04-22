@@ -1,7 +1,8 @@
 body {
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+
     background-color: #ffffff;
     min-height: 100vh;
     display: flex;
@@ -9,13 +10,16 @@ body {
     align-items: center;
     font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
   }
-  
-  body.index {
-    background-image: url('../../images/daily_bg.gif');
-  }
-  
-  body.monthly {
-    background-image: url('../../images/monthly_bg.gif');
+
+  #bgVideo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    object-fit: contain;  /* 배경처럼 꽉 채움 */
+    z-index: -1;         /* 콘텐츠 뒤로 보냄 */
+    pointer-events: none; /* 클릭 방지 */
   }
 
   
@@ -180,14 +184,23 @@ body {
 }
 
 
-  #slotWrapper {
+  /* #slotWrapper {
     width: 700px;
-    height: 300px;
+    height: 250px;
     margin: 20px auto;
     border: 3px solid #000;
     overflow: hidden;
     position: relative;
     background: white;
+  } */
+  #slotWrapper {
+    width: 700px;
+    height: 250px;
+    margin: 20px auto;
+    border: none;
+    overflow: hidden;
+    position: relative;
+    background: none;
   }
   
   #slot {
@@ -198,7 +211,7 @@ body {
   }
   
   #slot div {
-    height: 300px;
+    height: 250px;
     display: flex;
     align-items: center;
     justify-content: center;
