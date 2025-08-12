@@ -112,6 +112,11 @@ body {
     bottom: 20px;
     left: 20px;
   }
+
+  .review {
+    bottom: 20px;
+    left: 150px;
+  }
   
   .history {
     bottom: 20px;
