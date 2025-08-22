@@ -35,11 +35,12 @@
         <!-- 기록 열기 버튼 -->
         <button id="showHistoryBtn" class="btn history">기록 보기</button>
 
-        <!-- 뽑기 기록 팝업 -->
         <div id="historyModal" class="modal hidden">
           <div class="modal-content">
             <h2>📜 최근 뽑기 기록</h2>
-            <ul id="history2" class="history-list"></ul>
+            <div class="history-scroll">
+              <ul id="history" class="history-list"></ul>
+            </div>
             <button id="closeHistoryBtn" class="btn">닫기</button>
           </div>
         </div>
