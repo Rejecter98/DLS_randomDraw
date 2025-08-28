@@ -11,6 +11,16 @@ body {
     font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
   }
 
+  body.review {
+    background-image: url('../../images/review_bg.png');
+    background-size: cover; /* 이미지를 화면에 맞게 조정 */
+    background-position: center; /* 이미지를 중앙에 배치 */
+    background-repeat: no-repeat; /* 이미지 반복 방지 */
+}
+  body.review #slotWrapper {
+    background: white; /* review.html에서만 흰색 배경 */
+  }
+
   #bgVideo {
     position: fixed;
     top: 0;
@@ -227,6 +237,8 @@ body {
     position: relative;
     background: none;
   }
+
+
   
   #slot {
     position: absolute;
