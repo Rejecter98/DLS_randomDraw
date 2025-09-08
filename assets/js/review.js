@@ -1,4 +1,4 @@
-const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSlFBgUtQYZiWvohdZFqPDpRiw0Yd7t-Q4ifrpUkmo_ra6V56KM-h27Ur5HpC_DZ1lcZGsNk87yEaT9/pub?gid=1234478760&single=true&output=csv';
+const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSlFBgUtQYZiWvohdZFqPDpRiw0Yd7t-Q4ifrpUkmo_ra6V56KM-h27Ur5HpC_DZ1lcZGsNk87yEaT9/pub?gid=1510363189&single=true&output=csv';
 
 const slot = document.getElementById('slot');
 const startBtn = document.getElementById('startBtn');
@@ -62,11 +62,21 @@ async function loadItemsFromCSV() {
   const csv = await res.text();
   const lines = csv.trim().split('\n');
 
+  // items = lines.slice(1).map(line => {
+  //   const [name, weight] = line.split(',');
+  //   return {
+  //     name: name.trim(),
+  //     weight: parseInt(weight)
+  //   };
+  // });
   items = lines.slice(1).map(line => {
-    const [name, weight] = line.split(',');
+    const columns = line.split(','); // CSV의 각 열을 나눔
+    const name = columns[7]?.trim(); // H열의 데이터를 참조
+    const weight = parseInt(columns[8]?.trim()); // H열 바로 다음 열(I열)을 가중치로 사용
+  
     return {
-      name: name.trim(),
-      weight: parseInt(weight)
+      name: name || 'Unknown', // H열이 비어있을 경우 기본값 설정
+      weight: weight || 1 // 가중치가 비어있을 경우 기본값 설정
     };
   });
 
