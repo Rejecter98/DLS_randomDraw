@@ -71,8 +71,8 @@ async function loadItemsFromCSV() {
   // });
   items = lines.slice(1).map(line => {
     const columns = line.split(','); // CSV의 각 열을 나눔
-    const name = columns[7]?.trim(); // H열의 데이터를 참조
-    const weight = parseInt(columns[8]?.trim()); // H열 바로 다음 열(I열)을 가중치로 사용
+    const name = columns[9]?.trim(); // J열의 데이터를 참조
+    const weight = parseInt(columns[10]?.trim()); // J열 바로 다음 열(K열)을 가중치로 사용
   
     return {
       name: name || 'Unknown', // H열이 비어있을 경우 기본값 설정
