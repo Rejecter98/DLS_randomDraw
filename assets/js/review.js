@@ -72,13 +72,16 @@ async function loadItemsFromCSV() {
   items = lines.slice(1).map(line => {
     const columns = line.split(','); // CSV의 각 열을 나눔
     const name = columns[9]?.trim(); // J열의 데이터를 참조
-    const weight = parseInt(columns[10]?.trim()); // J열 바로 다음 열(K열)을 가중치로 사용
+    const weight = parseInt(columns[10]?.trim()); // K열의 데이터를 참조
   
-    return {
-      name: name || 'Unknown', // H열이 비어있을 경우 기본값 설정
-      weight: weight || 1 // 가중치가 비어있을 경우 기본값 설정
-    };
-  });
+    // J열과 K열이 비어있지 않은 경우에만 반환
+    if (name && !isNaN(weight)) {
+      return {
+        name: name,
+        weight: weight
+      };
+    }
+  }).filter(item => item);
 
   initSlot(); // 슬롯에 반영
 }
