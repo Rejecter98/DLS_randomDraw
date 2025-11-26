@@ -1,4 +1,4 @@
-const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSlFBgUtQYZiWvohdZFqPDpRiw0Yd7t-Q4ifrpUkmo_ra6V56KM-h27Ur5HpC_DZ1lcZGsNk87yEaT9/pub?gid=377177771&single=true&output=csv';
+const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSlFBgUtQYZiWvohdZFqPDpRiw0Yd7t-Q4ifrpUkmo_ra6V56KM-h27Ur5HpC_DZ1lcZGsNk87yEaT9/pub?gid=1510363189&single=true&output=csv';
 
 const slot = document.getElementById('slot');
 const startBtn = document.getElementById('startBtn');
@@ -65,10 +65,10 @@ async function loadItemsFromCSV() {
 
   items = lines.slice(1).map(line => {
     const columns = line.split(','); // CSV의 각 열을 나눔
-    const name = columns[7]?.trim(); // H열의 데이터를 참조
-    const weight = parseInt(columns[8]?.trim()); // I열의 데이터를 참조
+    const name = columns[9]?.trim(); // J열의 데이터를 참조
+    const weight = parseInt(columns[10]?.trim()); // K열의 데이터를 참조
 
-    // H열과 I열이 비어있지 않은 경우에만 반환
+    // J열과 K열이 비어있지 않은 경우에만 반환
     if (name && !isNaN(weight)) {
       return {
         name: name,
