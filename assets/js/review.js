@@ -56,24 +56,17 @@ closeHistoryBtn.addEventListener('click', () => {
 });
 
 
-//csv파일 로드
+// csv파일 로드
 async function loadItemsFromCSV() {
   const res = await fetch(csvUrl);
   const csv = await res.text();
   const lines = csv.trim().split('\n');
 
-  // items = lines.slice(1).map(line => {
-  //   const [name, weight] = line.split(',');
-  //   return {
-  //     name: name.trim(),
-  //     weight: parseInt(weight)
-  //   };
-  // });
   items = lines.slice(1).map(line => {
     const columns = line.split(','); // CSV의 각 열을 나눔
     const name = columns[9]?.trim(); // J열의 데이터를 참조
     const weight = parseInt(columns[10]?.trim()); // K열의 데이터를 참조
-  
+
     // J열과 K열이 비어있지 않은 경우에만 반환
     if (name && !isNaN(weight)) {
       return {
@@ -81,7 +74,7 @@ async function loadItemsFromCSV() {
         weight: weight
       };
     }
-  }).filter(item => item);
+  }).filter(item => item); // undefined 항목 제거
 
   initSlot(); // 슬롯에 반영
 }
