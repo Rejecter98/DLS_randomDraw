@@ -56,6 +56,7 @@ closeHistoryBtn.addEventListener('click', () => {
 });
 
 
+//csv파일 로드
 // csv파일 로드
 async function loadItemsFromCSV() {
   const res = await fetch(csvUrl);
