@@ -1,174 +1,179 @@
 const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSlFBgUtQYZiWvohdZFqPDpRiw0Yd7t-Q4ifrpUkmo_ra6V56KM-h27Ur5HpC_DZ1lcZGsNk87yEaT9/pub?gid=377177771&single=true&output=csv';
 
-const slot = document.getElementById('slot');
 const startBtn = document.getElementById('startBtn');
 const historyList = document.getElementById('history2');
 const showHistoryBtn = document.getElementById('showHistoryBtn');
 const closeHistoryBtn = document.getElementById('closeHistoryBtn');
 const historyModal = document.getElementById('historyModal');
+const loadingOverlay = document.getElementById('loadingOverlay');
+const fullscreenBtn = document.getElementById('fullscreenBtn');
 
 let items = [];
 let history = [];
-let animationFrame;
-let position = 0;
-let speed = 30;
+let isAnimating = false;
 
-const fullscreenBtn = document.getElementById('fullscreenBtn');
+const CARD_COUNT = 3;
 
-// 전체화면 진입 버튼 클릭
-fullscreenBtn.addEventListener('click', openFullscreen);
-
-// 전체화면 요청
-function openFullscreen() {
-  const elem = document.documentElement;
-
-  if (elem.requestFullscreen) {
-    elem.requestFullscreen();
-  } else if (elem.mozRequestFullScreen) { // Firefox
-    elem.mozRequestFullScreen();
-  } else if (elem.webkitRequestFullscreen) { // Chrome, Safari
-    elem.webkitRequestFullscreen();
-  } else if (elem.msRequestFullscreen) { // IE/Edge
-    elem.msRequestFullscreen();
-  }
-}
-
-// 전체화면 상태 변화 감지
+// 전체화면
+fullscreenBtn.addEventListener('click', () => {
+  const el = document.documentElement;
+  if (el.requestFullscreen) el.requestFullscreen();
+  else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+});
 document.addEventListener('fullscreenchange', () => {
-  if (document.fullscreenElement) {
-    // 전체화면 모드 진입했으면 버튼 숨기기
-    fullscreenBtn.style.display = 'none';
-  } else {
-    // 전체화면 종료했으면 버튼 다시 보이기
-    fullscreenBtn.style.display = 'block';
-  }
+  fullscreenBtn.style.visibility = document.fullscreenElement ? 'hidden' : 'visible';
 });
 
+showHistoryBtn.addEventListener('click', () => historyModal.classList.remove('hidden'));
+closeHistoryBtn.addEventListener('click', () => historyModal.classList.add('hidden'));
 
-// 기록 보기 버튼 → 팝업 열기
-showHistoryBtn.addEventListener('click', () => {
-  historyModal.classList.remove('hidden');
-});
-
-// 닫기 버튼 → 팝업 닫기
-closeHistoryBtn.addEventListener('click', () => {
-  historyModal.classList.add('hidden');
-});
-
-
-//csv파일 로드
-// csv파일 로드
+// CSV 로드
 async function loadItemsFromCSV() {
   const res = await fetch(csvUrl);
   const csv = await res.text();
-  const lines = csv.trim().split('\n');
-
-  items = lines.slice(1).map(line => {
-    const columns = line.split(','); // CSV의 각 열을 나눔
-    const name = columns[7]?.trim(); // H열의 데이터를 참조
-    const weight = parseInt(columns[8]?.trim()); // I열의 데이터를 참조
-
-    // H열과 I열이 비어있지 않은 경우에만 반환
-    if (name && !isNaN(weight)) {
-      return {
-        name: name,
-        weight: weight
-      };
-    }
-  }).filter(item => item); // undefined 항목 제거
-
-  initSlot(); // 슬롯에 반영
+  items = csv.trim().split('\n').slice(1).map(line => {
+    const cols = line.split(',');
+    const name = cols[7]?.trim();
+    const weight = parseInt(cols[8]?.trim());
+    return { name, weight };
+  }).filter(i => i.name && !isNaN(i.weight));
+  initCard();
+  loadingOverlay.classList.add('hidden');
 }
 
-window.addEventListener('DOMContentLoaded', () => {
-  loadItemsFromCSV();
+window.addEventListener('DOMContentLoaded', loadItemsFromCSV);
+
+// 가중치 랜덤
+function weightedRandom() {
+  const total = items.reduce((s, i) => s + i.weight, 0);
+  let r = Math.random() * total;
+  for (const item of items) {
+    if (r < item.weight) return item;
+    r -= item.weight;
+  }
+  return items[0];
+}
+
+function setBtn(disabled) {
+  isAnimating = disabled;
+  startBtn.classList.toggle('disabled', disabled);
+}
+
+// 카드 초기화
+function initCard() {
+  const container = document.getElementById('cardContainer');
+  container.innerHTML = '';
+  for (let i = 0; i < CARD_COUNT; i++) {
+    const card = document.createElement('div');
+    card.className = 'flip-card';
+    card.innerHTML = `
+      <div class="flip-card-inner">
+        <div class="flip-card-front">🎁</div>
+        <div class="flip-card-back"></div>
+      </div>`;
+    container.appendChild(card);
+  }
+  document.getElementById('cardHint').textContent = '';
+}
+
+// START 클릭
+startBtn.addEventListener('click', () => {
+  if (isAnimating || items.length === 0) return;
+  startCard();
 });
 
+function startCard() {
+  setBtn(true);
+  const winner = weightedRandom();
+  const cards = [...document.querySelectorAll('.flip-card')];
 
-// 초기 슬롯 셋업
-function initSlot() {
-  slot.innerHTML = '';
-  // 항목을 충분히 많이 복제해서 길게 만든다
-  for (let i = 0; i < 50; i++) {
-    const itemDiv = document.createElement('div');
-    const randomItem = weightedRandom(items);
-    itemDiv.textContent = randomItem.name;
-    slot.appendChild(itemDiv);
-  }
-}
+  cards.forEach(c => {
+    c.querySelector('.flip-card-inner').classList.remove('flipped');
+    c.classList.remove('selectable');
+    c.onclick = null;
+    c.querySelector('.flip-card-back').textContent = '';
+  });
 
-// 가중치 기반 랜덤
-function weightedRandom(items) {
-  const totalWeight = items.reduce((sum, item) => sum + item.weight, 0);
-  let randomNum = Math.random() * totalWeight;
-  for (let item of items) {
-    if (randomNum < item.weight) {
-      return item;
-    }
-    randomNum -= item.weight;
-  }
-}
+  document.getElementById('cardHint').textContent = '카드를 섞는 중...';
 
-// 뽑기 시작
-function startRolling() {
-  cancelAnimationFrame(animationFrame);
-  initSlot();
-  position = 0;
-  speed = 30; // 초기 빠른 속도
-  rolling();
-}
-
-// 롤링 애니메이션
-function rolling() {
-  position += speed;
-  slot.style.top = `-${position}px`;
-
-  // 끝까지 가면 다시 위로
-  if (position > slot.scrollHeight - 100) {
-    position = 0;
-  }
-
-  // 감속 시작
-  if (speed > 1) {
-    speed *= 0.97; // 점점 느려짐
-    animationFrame = requestAnimationFrame(rolling);
-  } else {
-    stopAtResult();
-  }
-}
-
-// 멈추기
-function stopAtResult() {
-  const itemHeight = 250;
-  const finalTop = Math.round(position / itemHeight) * itemHeight;
-  slot.style.top = `-${finalTop}px`;
-
-  const index = Math.floor(finalTop / itemHeight) % slot.children.length;
-  const selectedItem = slot.children[index].textContent;
-
-  saveResult(selectedItem);
-}
-
-// 결과 저장
-function saveResult(item) {
-  history.unshift(item);
-  if (history.length > 20) {
-    history.pop();
-  }
-  renderHistory();
-}
-
-// 기록 렌더링
-function renderHistory() {
-  historyList.innerHTML = '';
-  history.forEach((item, idx) => {
-    const li = document.createElement('li');
-    li.textContent = `${idx + 1}. ${item}`;
-    historyList.appendChild(li);
+  shuffleCards(cards, () => {
+    document.getElementById('cardHint').textContent = '카드를 선택하세요!';
+    const freshCards = [...document.querySelectorAll('.flip-card')];
+    freshCards.forEach(card => {
+      card.classList.add('selectable');
+      card.onclick = () => {
+        freshCards.forEach(c => { c.classList.remove('selectable'); c.onclick = null; });
+        card.querySelector('.flip-card-back').textContent = winner.name;
+        card.querySelector('.flip-card-inner').classList.add('flipped');
+        document.getElementById('cardHint').textContent = '';
+        saveResult(winner.name);
+        setTimeout(() => setBtn(false), 800);
+      };
+    });
   });
 }
 
-startBtn.addEventListener('click', startRolling);
+function shuffleCards(cards, callback) {
+  const container = document.getElementById('cardContainer');
+  const GAP = 20;
+  const cardW = cards[0].offsetWidth;
+  const cardH = cards[0].offsetHeight;
 
-// 초기 셋업
-initSlot();
+  container.style.position = 'relative';
+  container.style.height = cardH + 'px';
+  container.style.width = ((cardW + GAP) * CARD_COUNT - GAP) + 'px';
+
+  let pos = cards.map((_, i) => i);
+
+  cards.forEach((c, i) => {
+    c.style.position = 'absolute';
+    c.style.left = (i * (cardW + GAP)) + 'px';
+    c.style.top = '0';
+    c.style.transition = 'left 0.25s ease';
+  });
+
+  function swap(a, b) {
+    const slotA = pos[a], slotB = pos[b];
+    cards[a].style.left = (slotB * (cardW + GAP)) + 'px';
+    cards[b].style.left = (slotA * (cardW + GAP)) + 'px';
+    pos[a] = slotB; pos[b] = slotA;
+  }
+
+  const seq = [[0,1],[1,2],[0,2],[0,1],[1,2]];
+  seq.forEach((s, i) => setTimeout(() => swap(s[0], s[1]), i * 230));
+
+  setTimeout(() => {
+    [...cards].sort((a, b) => pos[cards.indexOf(a)] - pos[cards.indexOf(b)])
+              .forEach(c => container.appendChild(c));
+    cards.forEach(c => {
+      c.style.position = '';
+      c.style.left = '';
+      c.style.top = '';
+      c.style.transition = '';
+    });
+    container.style.position = '';
+    container.style.height = '';
+    container.style.width = '';
+    callback();
+  }, seq.length * 230 + 250);
+}
+
+// 기록 저장 및 렌더링
+function saveResult(name) {
+  const time = new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  history.unshift({ name, time });
+  if (history.length > 20) history.pop();
+  renderHistory();
+}
+
+function renderHistory() {
+  historyList.innerHTML = '';
+  history.forEach((entry, idx) => {
+    const li = document.createElement('li');
+    li.innerHTML =
+      `<span class="history-num">${idx + 1}</span>` +
+      `<span class="history-name">${entry.name}</span>` +
+      `<span class="history-time">${entry.time}</span>`;
+    historyList.appendChild(li);
+  });
+}

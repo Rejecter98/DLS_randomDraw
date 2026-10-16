@@ -1,51 +1,126 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DLS 실력의힘 간식뽑기 프로그램</title>
+    <title>DLS 실력의힘 Monthly 상품 뽑기</title>
     <link rel="stylesheet" href="../css/style.css" />
+    <style>
+      /* ── 카드 뒤집기 ── */
+      #cardContainer {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+      }
+      .flip-card {
+        width: clamp(140px, 20vw, 200px);
+        height: clamp(200px, 28vw, 280px);
+        perspective: 700px;
+      }
+      .flip-card-inner {
+        width: 100%; height: 100%;
+        position: relative;
+        transform-style: preserve-3d;
+        transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .flip-card-inner.flipped { transform: rotateY(180deg); }
+      .flip-card-front, .flip-card-back {
+        position: absolute; inset: 0;
+        border-radius: 20px;
+        display: flex; align-items: center; justify-content: center;
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+        font-weight: bold;
+      }
+      .flip-card-front {
+        background: rgba(255,255,255,0.07);
+        border: 1.5px solid rgba(255,215,80,0.3);
+        color: rgba(255,215,80,0.5);
+        font-size: clamp(40px, 7vw, 64px);
+        transition: border-color 0.3s, box-shadow 0.3s;
+      }
+      .flip-card-back {
+        background: rgba(255,215,80,0.12);
+        border: 2px solid rgba(255,215,80,0.65);
+        color: white;
+        font-size: clamp(16px, 2.8vw, 24px);
+        transform: rotateY(180deg);
+        padding: 14px;
+        text-align: center;
+        word-break: keep-all;
+        line-height: 1.4;
+      }
+      .flip-card.selectable { cursor: pointer; }
+      .flip-card.selectable .flip-card-front {
+        border-color: rgba(255,215,80,0.75);
+        animation: cardGlow 1.4s ease-in-out infinite alternate;
+      }
+      @keyframes cardGlow {
+        from { box-shadow: 0 0 8px rgba(255,215,80,0.15); }
+        to   { box-shadow: 0 0 24px rgba(255,215,80,0.6); }
+      }
+      .flip-card.selectable:active .flip-card-front { filter: brightness(1.3); }
+
+      #cardHint {
+        font-size: 18px;
+        font-weight: 600;
+        color: rgba(255,215,80,0.85);
+        letter-spacing: 0.5px;
+        min-height: 28px;
+        font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+      }
+    </style>
 </head>
 <body class="monthly">
 
-  <video autoplay muted loop playsinline id="bgVideo">
-    <source src="../../images/monthly_bg.mp4" type="video/mp4">
-    브라우저가 video 태그를 지원하지 않습니다.
-  </video>
+  <div id="starField"></div>
 
-    <a href="../../index.html" id="bottomLeftBtn" class="btn change">Daily</a>
-    <a href="review.html" id="bottomLeftBtn" class="btn review">Review</a>
-    <button id="fullscreenBtn" class="btn full">전체화면</button>
+  <div id="loadingOverlay">
+    <div class="spinner"></div>
+    <div class="loading-text">데이터 불러오는 중...</div>
+  </div>
 
+  <img src="../../images/logo_white.png" id="siteLogo" alt="실력의힘" />
 
-    
-    <div class="container">
-        <!-- <h1 id="Title">Monthly reward!</h1> -->
-        <div id="slotWrapper" class="card">
-            <div id="slot">
-              <!-- 항목들이 자동으로 생성됩니다 -->
-            </div>
-          </div>
+  <div id="tabbar">
+    <div class="tab-group">
+      <a href="../../index.html" class="tab-item"><span class="tab-icon">📅</span><span class="tab-label">Daily</span></a>
+      <a class="tab-item active"><span class="tab-icon">📆</span><span class="tab-label">Monthly</span></a>
+      <a href="review.html" class="tab-item"><span class="tab-icon">⭐</span><span class="tab-label">Review</span></a>
+    </div>
+    <div class="tab-divider"></div>
+    <div class="tab-group">
+      <button id="fullscreenBtn" class="tab-item"><span class="tab-icon">⛶</span><span class="tab-label">전체화면</span></button>
+      <button id="showHistoryBtn" class="tab-item"><span class="tab-icon">📋</span><span class="tab-label">기록</span></button>
+    </div>
+  </div>
 
+  <div class="container">
+    <h1 id="Title">🎁 Monthly 상품 뽑기</h1>
 
-          <button id="startBtn" class="start-btn">
-            <img src="../../images/start_btn.png" alt="뽑기 시작" />
-          </button>
-        
-        <!-- 기록 열기 버튼 -->
-        <button id="showHistoryBtn" class="btn history">기록 보기</button>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:16px;margin-bottom:16px;">
+      <div id="cardContainer"></div>
+      <div id="cardHint"></div>
+    </div>
 
-        <div id="historyModal" class="modal hidden">
-          <div class="modal-content">
-            <h2>📜 최근 뽑기 기록</h2>
-            <div class="history-scroll">
-              <ul id="history2" class="history-list"></ul>
-            </div>
-            <button id="closeHistoryBtn" class="btn">닫기</button>
-          </div>
+    <button id="startBtn" class="start-btn">
+      <img src="../../images/start_btn.png" alt="뽑기 시작" />
+    </button>
+
+    <div id="historyModal" class="modal hidden">
+      <div class="modal-box">
+        <div class="modal-header">
+          <span class="modal-title">📜 뽑기 기록</span>
+          <button id="closeHistoryBtn" class="modal-close">✕</button>
         </div>
+        <div class="history-scroll">
+          <ul id="history2" class="history-list"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
 
-
-      <script src="../js/monthly.js"></script>
+  <script src="../js/stars.js"></script>
+  <script src="../js/monthly.js"></script>
 </body>
 </html>

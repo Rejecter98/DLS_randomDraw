@@ -6,12 +6,14 @@ const historyList = document.getElementById('history2');
 const showHistoryBtn = document.getElementById('showHistoryBtn');
 const closeHistoryBtn = document.getElementById('closeHistoryBtn');
 const historyModal = document.getElementById('historyModal');
+const loadingOverlay = document.getElementById('loadingOverlay');
 
 let items = [];
 let history = [];
 let animationFrame;
 let position = 0;
 let speed = 30;
+let isRolling = false;
 
 const fullscreenBtn = document.getElementById('fullscreenBtn');
 
@@ -36,11 +38,9 @@ function openFullscreen() {
 // 전체화면 상태 변화 감지
 document.addEventListener('fullscreenchange', () => {
   if (document.fullscreenElement) {
-    // 전체화면 모드 진입했으면 버튼 숨기기
-    fullscreenBtn.style.display = 'none';
+    fullscreenBtn.style.visibility = 'hidden';
   } else {
-    // 전체화면 종료했으면 버튼 다시 보이기
-    fullscreenBtn.style.display = 'block';
+    fullscreenBtn.style.visibility = 'visible';
   }
 });
 
@@ -77,7 +77,8 @@ async function loadItemsFromCSV() {
     }
   }).filter(item => item); // undefined 항목 제거
 
-  initSlot(); // 슬롯에 반영
+  initSlot();
+  loadingOverlay.classList.add('hidden');
 }
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -111,10 +112,13 @@ function weightedRandom(items) {
 
 // 뽑기 시작
 function startRolling() {
+  if (isRolling) return;
+  isRolling = true;
+  startBtn.classList.add('disabled');
   cancelAnimationFrame(animationFrame);
   initSlot();
   position = 0;
-  speed = 30; // 초기 빠른 속도
+  speed = 30;
   rolling();
 }
 
@@ -139,7 +143,7 @@ function rolling() {
 
 // 멈추기
 function stopAtResult() {
-  const itemHeight = 250;
+  const itemHeight = slot.children[0]?.offsetHeight || 250;
   const finalTop = Math.round(position / itemHeight) * itemHeight;
   slot.style.top = `-${finalTop}px`;
 
@@ -147,23 +151,31 @@ function stopAtResult() {
   const selectedItem = slot.children[index].textContent;
 
   saveResult(selectedItem);
+
+  setTimeout(() => {
+    isRolling = false;
+    startBtn.classList.remove('disabled');
+  }, 300);
 }
 
 // 결과 저장
 function saveResult(item) {
-  history.unshift(item);
-  if (history.length > 20) {
-    history.pop();
-  }
+  const now = new Date();
+  const time = now.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  history.unshift({ name: item, time });
+  if (history.length > 20) history.pop();
   renderHistory();
 }
 
 // 기록 렌더링
 function renderHistory() {
   historyList.innerHTML = '';
-  history.forEach((item, idx) => {
+  history.forEach((entry, idx) => {
     const li = document.createElement('li');
-    li.textContent = `${idx + 1}. ${item}`;
+    li.innerHTML =
+      `<span class="history-num">${idx + 1}</span>` +
+      `<span class="history-name">${entry.name}</span>` +
+      `<span class="history-time">${entry.time}</span>`;
     historyList.appendChild(li);
   });
 }
