@@ -144,8 +144,10 @@ function rolling() {
 // 멈추기
 function stopAtResult() {
   const itemHeight = slot.children[0]?.offsetHeight || 250;
-  const finalTop = Math.round(position / itemHeight) * itemHeight;
+  const finalTop = Math.ceil(position / itemHeight) * itemHeight;
+  slot.style.transition = 'top 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
   slot.style.top = `-${finalTop}px`;
+  setTimeout(() => { slot.style.transition = ''; }, 400);
 
   const index = Math.floor(finalTop / itemHeight) % slot.children.length;
   const selectedItem = slot.children[index].textContent;
