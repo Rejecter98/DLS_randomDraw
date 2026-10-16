@@ -127,37 +127,40 @@ function rolling() {
   position += speed;
   slot.style.top = `-${position}px`;
 
-  // 끝까지 가면 다시 위로
   if (position > slot.scrollHeight - 100) {
     position = 0;
   }
 
-  // 감속 시작
-  if (speed > 1) {
-    speed *= 0.97; // 점점 느려짐
+  if (speed > 8) {
+    speed *= 0.97;
     animationFrame = requestAnimationFrame(rolling);
   } else {
-    stopAtResult();
+    coastToStop();
   }
 }
 
-// 멈추기
-function stopAtResult() {
+// 남은 관성으로 항목 경계까지 자연스럽게 미끄러짐
+function coastToStop() {
   const itemHeight = slot.children[0]?.offsetHeight || 250;
-  const finalTop = Math.ceil(position / itemHeight) * itemHeight;
-  slot.style.transition = 'top 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+  const remaining = speed * 0.97 / 0.03;
+  const projected = position + remaining;
+  const finalTop = Math.round(projected / itemHeight) * itemHeight;
+  const frames = Math.log(1 / speed) / Math.log(0.97);
+  const duration = Math.max(0.35, Math.min(frames * 16 / 1000, 1.0));
+
+  slot.style.transition = `top ${duration}s cubic-bezier(0.22, 0.61, 0.36, 1)`;
   slot.style.top = `-${finalTop}px`;
-  setTimeout(() => { slot.style.transition = ''; }, 400);
-
-  const index = Math.floor(finalTop / itemHeight) % slot.children.length;
-  const selectedItem = slot.children[index].textContent;
-
-  saveResult(selectedItem);
+  position = finalTop;
 
   setTimeout(() => {
-    isRolling = false;
-    startBtn.classList.remove('disabled');
-  }, 300);
+    slot.style.transition = '';
+    const index = Math.floor(finalTop / itemHeight) % slot.children.length;
+    saveResult(slot.children[index].textContent);
+    setTimeout(() => {
+      isRolling = false;
+      startBtn.classList.remove('disabled');
+    }, 300);
+  }, duration * 1000 + 50);
 }
 
 // 결과 저장
