@@ -131,36 +131,27 @@ function rolling() {
     position = 0;
   }
 
-  if (speed > 8) {
+  if (speed > 0.5) {
     speed *= 0.97;
     animationFrame = requestAnimationFrame(rolling);
   } else {
-    coastToStop();
+    stopAtResult();
   }
 }
 
-// 남은 관성으로 항목 경계까지 자연스럽게 미끄러짐
-function coastToStop() {
+// 멈추기
+function stopAtResult() {
   const itemHeight = slot.children[0]?.offsetHeight || 250;
-  const remaining = speed * 0.97 / 0.03;
-  const projected = position + remaining;
-  const finalTop = Math.round(projected / itemHeight) * itemHeight;
-  const frames = Math.log(1 / speed) / Math.log(0.97);
-  const duration = Math.max(0.35, Math.min(frames * 16 / 1000, 1.0));
-
-  slot.style.transition = `top ${duration}s cubic-bezier(0.22, 0.61, 0.36, 1)`;
+  const finalTop = Math.round(position / itemHeight) * itemHeight;
   slot.style.top = `-${finalTop}px`;
-  position = finalTop;
+
+  const index = Math.floor(finalTop / itemHeight) % slot.children.length;
+  saveResult(slot.children[index].textContent);
 
   setTimeout(() => {
-    slot.style.transition = '';
-    const index = Math.floor(finalTop / itemHeight) % slot.children.length;
-    saveResult(slot.children[index].textContent);
-    setTimeout(() => {
-      isRolling = false;
-      startBtn.classList.remove('disabled');
-    }, 300);
-  }, duration * 1000 + 50);
+    isRolling = false;
+    startBtn.classList.remove('disabled');
+  }, 300);
 }
 
 // 결과 저장
