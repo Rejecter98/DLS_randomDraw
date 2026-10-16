@@ -131,8 +131,8 @@ function rolling() {
     position = 0;
   }
 
-  if (speed > 0.5) {
-    speed *= 0.97;
+  if (speed > 0.2) {
+    speed *= 0.96;
     animationFrame = requestAnimationFrame(rolling);
   } else {
     stopAtResult();
